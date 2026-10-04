@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}Importación terminada{% endblock %}
+
+{% block contenido %}
+<div class="encabezado-pagina">
+  <h1>Importación terminada</h1>
+  <a class="boton boton-cobrar" href="{{ url_for('productos.lista') }}">Ver productos</a>
+</div>
+
+<div class="reportes">
+  <section class="panel panel-corte">
+    <h2>Productos nuevos</h2>
+    <p class="cifra">{{ resumen.nuevos }}</p>
+  </section>
+  <section class="panel">
+    <h2>Actualizados</h2>
+    <p class="cifra">{{ resumen.actualizados }}</p>
+  </section>
+  <section class="panel">
+    <h2>Omitidos</h2>
+    <p class="cifra">{{ resumen.omitidos }}</p>
+  </section>
+</div>
+
+{% if resumen.errores %}
+<section class="panel" style="margin-top:1.25rem">
+  <h2>Filas que no se importaron</h2>
+  <ul class="lista-errores">
+    {% for e in resumen.errores[:50] %}<li>{{ e }}</li>{% endfor %}
+  </ul>
+  {% if resumen.errores|length > 50 %}<p class="vacio">…y {{ resumen.errores|length - 50 }} más.</p>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

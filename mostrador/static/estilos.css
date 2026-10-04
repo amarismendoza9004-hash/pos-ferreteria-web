@@ -1,0 +1,289 @@
+/* Mostrador — estilos
+   Paleta de ferretería: gris acero, tinta pizarra y amarillo de señalización
+   reservado para la acción principal (cobrar) y el total. */
+
+:root {
+  --fondo: #eef0ee;
+  --superficie: #ffffff;
+  --tinta: #22292e;
+  --tinta-suave: #5b6b73;
+  --linea: #d3d8d5;
+  --senal: #f0b323;
+  --senal-oscura: #c98f0a;
+  --alerta: #b13a26;
+  --alerta-fondo: #fbe9e5;
+  --ok: #2c6a4e;
+  --ok-fondo: #e3f1ea;
+  --enfoque: #1d6fb8;
+
+  --letra: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --letra-titulo: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+
+  --radio: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font: 400 1rem/1.5 var(--letra);
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2 { font-family: var(--letra-titulo); font-weight: 600; line-height: 1.15; margin: 0; }
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.2rem; }
+
+a { color: var(--tinta); text-underline-offset: 3px; }
+a:hover { color: var(--enfoque); }
+
+:focus-visible { outline: 3px solid var(--enfoque); outline-offset: 2px; }
+
+.visualmente-oculto {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- Barra superior ---------- */
+
+.barra {
+  display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+  padding: 0 1.5rem;
+  background: var(--tinta);
+  color: #fff;
+  border-bottom: 4px solid var(--senal);
+}
+.marca {
+  color: #fff; text-decoration: none;
+  font: 700 1.25rem var(--letra-titulo);
+  padding: 0.85rem 0;
+}
+.marca:hover { color: var(--senal); }
+.menu { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.menu a {
+  color: #d6dde0; text-decoration: none; font-weight: 500;
+  padding: 0.95rem 0.9rem 0.8rem;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -4px;
+}
+.menu a:hover { color: #fff; }
+.menu a[aria-current="page"] { color: #fff; border-bottom-color: #fff; }
+
+/* ---------- Estructura general ---------- */
+
+.contenido { max-width: 72rem; margin: 0 auto; padding: 1.75rem 1.5rem 3rem; }
+.contenido-caja { max-width: 84rem; }
+
+.encabezado-pagina {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+}
+
+.avisos { margin-bottom: 1rem; display: grid; gap: 0.5rem; }
+.aviso { margin: 0; padding: 0.6rem 0.9rem; border-radius: var(--radio); border-left: 4px solid; }
+.aviso-ok { background: var(--ok-fondo); border-color: var(--ok); }
+.aviso-error { background: var(--alerta-fondo); border-color: var(--alerta); color: #6e1f12; }
+
+.vacio { color: var(--tinta-suave); margin: 0.5rem 0; }
+.vacio-grande { color: var(--tinta-suave); padding: 2.5rem 0; text-align: center; }
+
+/* ---------- Controles ---------- */
+
+input[type="text"], input[type="search"], input[type="number"], input[type="date"], input:not([type]) {
+  font: inherit; color: inherit;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #b9c1bd;
+  border-radius: var(--radio);
+  background: #fff;
+}
+label > span { display: block; font-weight: 500; margin-bottom: 0.3rem; }
+
+.boton {
+  font: 600 1rem var(--letra); color: var(--tinta);
+  display: inline-block; text-decoration: none; cursor: pointer;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid #9aa5a0; border-radius: var(--radio);
+  background: var(--superficie);
+}
+.boton:hover { background: #f4f6f5; color: var(--tinta); }
+.boton-cobrar { background: var(--senal); border-color: var(--senal-oscura); }
+.boton-cobrar:hover { background: #f5c24a; }
+.boton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.boton-texto {
+  font: inherit; background: none; border: 0; padding: 0;
+  color: var(--tinta-suave); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.boton-texto:hover { color: var(--tinta); }
+.peligro { color: var(--alerta); }
+
+.filtros { display: flex; align-items: flex-end; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.filtros label { display: grid; gap: 0.3rem; font-weight: 500; }
+.filtros .crece { flex: 1 1 16rem; }
+.filtros .casilla { display: flex; align-items: center; gap: 0.4rem; padding-bottom: 0.6rem; }
+
+/* ---------- Tablas ---------- */
+
+.tabla-envoltura { overflow-x: auto; background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); }
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th, .tabla td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--linea); }
+.tabla thead th { font-weight: 600; color: var(--tinta-suave); font-size: 0.9rem; background: #f6f7f6; }
+.tabla tbody tr:last-child > * { border-bottom: 0; }
+.num { text-align: right !important; white-space: nowrap; }
+.codigo { color: var(--tinta-suave); }
+.acciones { text-align: right !important; white-space: nowrap; }
+.acciones form { display: inline; margin: 0 0 0 1rem; }
+
+.etiqueta-bajo {
+  display: inline-block; padding: 0.05rem 0.45rem; border-radius: 4px;
+  background: var(--alerta-fondo); color: var(--alerta); font-weight: 600;
+}
+
+.resumen-linea { margin: 0 0 0.75rem; color: var(--tinta-suave); }
+.resumen-linea strong { color: var(--tinta); }
+
+/* ---------- Formulario de producto ---------- */
+
+.formulario {
+  display: grid; gap: 1.1rem; max-width: 44rem;
+  background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio);
+  padding: 1.5rem;
+}
+.formulario small { display: block; color: var(--tinta-suave); margin-top: 0.3rem; }
+.formulario-fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; }
+.formulario-acciones { display: flex; align-items: center; gap: 1.25rem; }
+
+/* ---------- Caja ---------- */
+
+.caja { display: grid; grid-template-columns: minmax(0, 1fr) 24rem; gap: 1.75rem; align-items: start; }
+
+.campo-busqueda input { font-size: 1.25rem; padding: 0.8rem 1rem; border-width: 2px; border-color: var(--tinta); }
+.ayuda { color: var(--tinta-suave); font-size: 0.9rem; margin: 0.4rem 0 1rem; }
+
+.resultados { list-style: none; margin: 0; padding: 0; background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); }
+.resultados li + li { border-top: 1px solid var(--linea); }
+.resultados .vacio { padding: 1rem; margin: 0; }
+.resultado {
+  display: grid; grid-template-columns: 1fr auto; grid-template-areas: "nombre precio" "detalle stock";
+  column-gap: 1rem; width: 100%; text-align: left;
+  font: inherit; color: inherit; background: none; border: 0; cursor: pointer;
+  padding: 0.7rem 1rem;
+}
+.resultado:hover:not(:disabled) { background: #fbf5e3; }
+.resultado:disabled { cursor: not-allowed; opacity: 0.55; }
+.resultado-nombre { grid-area: nombre; font-weight: 500; }
+.resultado-precio { grid-area: precio; font-weight: 600; text-align: right; }
+.resultado-codigo { grid-area: detalle; color: var(--tinta-suave); font-size: 0.875rem; }
+.resultado-stock { grid-area: stock; color: var(--tinta-suave); font-size: 0.875rem; text-align: right; }
+
+/* ---------- El ticket: el elemento distintivo de la app ---------- */
+
+.ticket {
+  --diente: 10px;
+  position: relative;
+  background: #fffefb;
+  padding: 1.4rem 1.4rem 2rem;
+  box-shadow: 0 1px 0 var(--linea), 0 10px 24px -12px rgba(34, 41, 46, 0.35);
+  /* borde inferior dentado, como papel de ticket cortado */
+  -webkit-mask: radial-gradient(circle var(--diente) at 50% 100%, transparent 98%, #000) 50% 100% / calc(var(--diente) * 2.2) 100% repeat-x;
+          mask: radial-gradient(circle var(--diente) at 50% 100%, transparent 98%, #000) 50% 100% / calc(var(--diente) * 2.2) 100% repeat-x;
+}
+.ticket-caja { position: sticky; top: 1rem; }
+.ticket h2 { padding-bottom: 0.75rem; border-bottom: 2px dashed var(--linea); margin-bottom: 0.5rem; }
+
+.renglones { list-style: none; margin: 0; padding: 0; max-height: 40vh; overflow-y: auto; }
+.renglon {
+  display: grid; grid-template-columns: 1fr auto; grid-template-areas: "nombre subtotal" "unitario cantidad";
+  gap: 0.2rem 0.75rem; align-items: center;
+  padding: 0.6rem 0; border-bottom: 1px dotted var(--linea);
+}
+.renglon-nombre { grid-area: nombre; font-weight: 500; }
+.renglon-subtotal { grid-area: subtotal; font-weight: 600; text-align: right; }
+.renglon-unitario { grid-area: unitario; color: var(--tinta-suave); font-size: 0.875rem; }
+.cantidad { grid-area: cantidad; display: inline-flex; align-items: center; gap: 0.25rem; }
+.cantidad input { width: 3.25rem; padding: 0.2rem 0.3rem; text-align: center; }
+.cantidad button {
+  width: 1.9rem; height: 1.9rem; font: 600 1rem var(--letra);
+  border: 1px solid #b9c1bd; background: #fff; border-radius: 4px; cursor: pointer;
+}
+
+.total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin: 1rem 0; padding-top: 0.75rem; border-top: 2px dashed var(--linea);
+}
+.total span { font: 600 1.1rem var(--letra-titulo); }
+.total strong { font: 700 2.4rem var(--letra-titulo); letter-spacing: -0.01em; }
+
+.metodos { border: 0; padding: 0; margin: 0 0 0.9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.metodos legend { font-weight: 500; margin-bottom: 0.4rem; padding: 0; }
+.metodos label { display: flex; align-items: center; gap: 0.3rem; }
+
+.efectivo { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: end; margin-bottom: 0.9rem; }
+.efectivo[hidden] { display: none; }
+.efectivo p { margin: 0 0 0.55rem; white-space: nowrap; }
+
+.boton-cobrar#cobrar { width: 100%; font-size: 1.15rem; padding: 0.85rem; }
+#vaciar { display: block; margin: 0.75rem auto 0; }
+#error-cobro { margin-bottom: 0.75rem; }
+
+/* ---------- Ticket impreso ---------- */
+
+.vista-ticket { display: grid; justify-items: center; gap: 1.5rem; }
+.ticket-impreso { width: min(100%, 22rem); }
+.ticket-encabezado { text-align: center; border-bottom: 2px dashed var(--linea); padding-bottom: 0.75rem; }
+.ticket-encabezado h1 { font-size: 1.4rem; }
+.ticket-encabezado p { margin: 0.15rem 0 0; color: var(--tinta-suave); font-size: 0.9rem; }
+.ticket-tabla { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.95rem; }
+.ticket-tabla th { text-align: left; font-weight: 600; color: var(--tinta-suave); font-size: 0.85rem; padding-bottom: 0.3rem; }
+.ticket-tabla td { padding: 0.35rem 0; vertical-align: top; border-top: 1px dotted var(--linea); }
+.ticket-tabla td:first-child { width: 2.5rem; }
+.ticket-tabla small { color: var(--tinta-suave); }
+.ticket-totales { margin: 0; border-top: 2px dashed var(--linea); padding-top: 0.6rem; }
+.ticket-totales div { display: flex; justify-content: space-between; }
+.ticket-totales dd { margin: 0; }
+.ticket-total { font: 700 1.4rem var(--letra-titulo); }
+.ticket-gracias { text-align: center; color: var(--tinta-suave); margin: 1rem 0 0; }
+.acciones-ticket { display: flex; gap: 0.75rem; }
+
+/* ---------- Reportes ---------- */
+
+.reportes { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 1.25rem; }
+.panel { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radio); padding: 1.25rem; }
+.panel h2 { margin-bottom: 0.75rem; }
+.panel-corte { border-top: 4px solid var(--senal); }
+.cifra { font: 700 2.6rem var(--letra-titulo); margin: 0; line-height: 1; }
+.cifra-detalle { color: var(--tinta-suave); margin: 0.3rem 0 1rem; }
+.tabla-compacta th, .tabla-compacta td { padding: 0.45rem 0.25rem; }
+.tabla-compacta thead th { background: none; }
+
+/* ---------- Responsivo e impresión ---------- */
+
+@media (max-width: 860px) {
+  .caja { grid-template-columns: 1fr; }
+  .ticket-caja { position: static; }
+  .barra { gap: 0 1.5rem; }
+  .menu a { padding: 0.6rem 0.7rem 0.55rem; }
+}
+
+@media print {
+  .barra, .no-imprimir, .avisos { display: none !important; }
+  body { background: #fff; }
+  .contenido { padding: 0; }
+  .ticket { box-shadow: none; -webkit-mask: none; mask: none; }
+}
+
+/* ---------- Importar catálogo ---------- */
+
+.botones { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.subtitulo { margin: 0.5rem 0 0.6rem; }
+.tabla-muestra { font-size: 0.875rem; }
+.tabla-muestra th, .tabla-muestra td { white-space: nowrap; }
+.formulario-importar { max-width: none; margin-top: 1.25rem; }
+.formulario-importar h2 { margin-bottom: -0.25rem; }
+select { font: inherit; color: inherit; width: 100%; padding: 0.55rem 0.7rem; border: 1px solid #b9c1bd; border-radius: var(--radio); background: #fff; }
+input[type="file"] { font: inherit; }
+.opciones-existentes { flex-direction: column; gap: 0.4rem; }
+.lista-errores { margin: 0; padding-left: 1.2rem; color: var(--alerta); }

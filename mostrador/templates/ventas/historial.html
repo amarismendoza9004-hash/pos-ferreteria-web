@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Ventas{% endblock %}
+
+{% block contenido %}
+<div class="encabezado-pagina">
+  <h1>Ventas del día</h1>
+  <form class="filtros" method="get">
+    <label>Día <input type="date" name="dia" value="{{ dia }}"></label>
+    <button class="boton" type="submit">Ver ventas</button>
+  </form>
+</div>
+
+{% if ventas %}
+<p class="resumen-linea">{{ ventas|length }} ticket{{ 's' if ventas|length != 1 }} por <strong>{{ total_dia|dinero }}</strong></p>
+<div class="tabla-envoltura">
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th scope="col">Ticket</th><th scope="col">Hora</th><th scope="col" class="num">Piezas</th>
+        <th scope="col">Pago</th><th scope="col" class="num">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in ventas %}
+      <tr>
+        <td><a href="{{ url_for('ventas.ticket', venta_id=v.id) }}">{{ "%06d"|format(v.id) }}</a></td>
+        <td>{{ v.fecha[11:16] }}</td>
+        <td class="num">{{ v.piezas }}</td>
+        <td>{{ v.metodo_pago|capitalize }}</td>
+        <td class="num">{{ v.total_centavos|dinero }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="vacio-grande">No hay ventas registradas este día. <a href="{{ url_for('ventas.caja') }}">Ir a la caja</a></p>
+{% endif %}
+{% endblock %}

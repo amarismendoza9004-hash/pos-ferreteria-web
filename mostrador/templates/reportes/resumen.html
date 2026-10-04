@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block titulo %}Reportes{% endblock %}
+
+{% block contenido %}
+<div class="encabezado-pagina">
+  <h1>Reportes</h1>
+</div>
+
+<div class="reportes">
+  <section class="panel panel-corte">
+    <h2>Corte de caja de hoy</h2>
+    <p class="cifra">{{ hoy.total|dinero }}</p>
+    <p class="cifra-detalle">{{ hoy.tickets }} ticket{{ 's' if hoy.tickets != 1 }}</p>
+    {% if corte %}
+    <table class="tabla tabla-compacta">
+      <tbody>
+        {% for c in corte %}
+        <tr><th scope="row">{{ c.metodo_pago|capitalize }}</th><td class="num">{{ c.tickets }}</td><td class="num">{{ c.total|dinero }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="vacio">Sin ventas hoy todavía.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Últimos 7 días</h2>
+    {% if ultimos_dias %}
+    <table class="tabla tabla-compacta">
+      <thead><tr><th scope="col">Día</th><th scope="col" class="num">Tickets</th><th scope="col" class="num">Total</th></tr></thead>
+      <tbody>
+        {% for d in ultimos_dias %}
+        <tr>
+          <td><a href="{{ url_for('ventas.historial', dia=d.dia) }}">{{ d.dia }}</a></td>
+          <td class="num">{{ d.tickets }}</td>
+          <td class="num">{{ d.total|dinero }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="vacio">No hay ventas en los últimos 7 días.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Más vendidos (30 días)</h2>
+    {% if mas_vendidos %}
+    <table class="tabla tabla-compacta">
+      <thead><tr><th scope="col">Producto</th><th scope="col" class="num">Piezas</th><th scope="col" class="num">Importe</th></tr></thead>
+      <tbody>
+        {% for m in mas_vendidos %}
+        <tr><td>{{ m.nombre }}</td><td class="num">{{ m.piezas }}</td><td class="num">{{ m.total|dinero }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="vacio">Aquí aparecerán los productos con más salida.</p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Por surtir</h2>
+    {% if stock_bajo %}
+    <table class="tabla tabla-compacta">
+      <thead><tr><th scope="col">Producto</th><th scope="col" class="num">Hay</th><th scope="col" class="num">Mínimo</th></tr></thead>
+      <tbody>
+        {% for p in stock_bajo %}
+        <tr>
+          <td><a href="{{ url_for('productos.editar', producto_id=p.id) }}">{{ p.nombre }}</a></td>
+          <td class="num"><span class="etiqueta-bajo">{{ p.stock }}</span></td>
+          <td class="num">{{ p.stock_minimo }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="vacio">Todo el inventario está por encima del mínimo.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

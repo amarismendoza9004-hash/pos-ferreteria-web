@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% set editando = producto is not none %}
+{% block titulo %}{{ 'Editar producto' if editando else 'Agregar producto' }}{% endblock %}
+
+{% macro valor(campo, original) -%}
+  {{ form[campo] if form else original }}
+{%- endmacro %}
+
+{% block contenido %}
+<div class="encabezado-pagina">
+  <h1>{{ 'Editar ' ~ producto.nombre if editando else 'Agregar producto' }}</h1>
+</div>
+
+<form class="formulario" method="post">
+  <label>
+    <span>Código</span>
+    <input name="codigo" required value="{{ valor('codigo', producto.codigo if editando else '') }}"
+           placeholder="El que trae la etiqueta o uno propio">
+  </label>
+  <label>
+    <span>Nombre</span>
+    <input name="nombre" required value="{{ valor('nombre', producto.nombre if editando else '') }}">
+  </label>
+  <div class="formulario-fila">
+    <label>
+      <span>Precio de venta</span>
+      <input name="precio" required inputmode="decimal" placeholder="0.00"
+             value="{{ valor('precio', '%.2f'|format(producto.precio_centavos / 100) if editando else '') }}">
+    </label>
+    <label>
+      <span>Existencias</span>
+      <input name="stock" type="number" min="0" value="{{ valor('stock', producto.stock if editando else 0) }}">
+    </label>
+    <label>
+      <span>Stock mínimo</span>
+      <input name="stock_minimo" type="number" min="0" value="{{ valor('stock_minimo', producto.stock_minimo if editando else 0) }}">
+      <small>Avisa para surtir cuando las existencias lleguen a este número.</small>
+    </label>
+  </div>
+  <div class="formulario-acciones">
+    <button class="boton boton-cobrar" type="submit">{{ 'Guardar cambios' if editando else 'Agregar producto' }}</button>
+    <a href="{{ url_for('productos.lista') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}Ticket {{ venta.id }}{% endblock %}
+
+{% block contenido %}
+<div class="vista-ticket">
+  <article class="ticket ticket-impreso">
+    <header class="ticket-encabezado">
+      <h1>{{ nombre_negocio }}</h1>
+      <p>Ticket {{ "%06d"|format(venta.id) }}</p>
+      <p>{{ venta.fecha }}</p>
+    </header>
+
+    <table class="ticket-tabla">
+      <thead>
+        <tr><th scope="col">Cant.</th><th scope="col">Producto</th><th scope="col" class="num">Importe</th></tr>
+      </thead>
+      <tbody>
+        {% for r in renglones %}
+        <tr>
+          <td>{{ r.cantidad }}</td>
+          <td>{{ r.nombre }}<br><small>{{ r.precio_unitario_centavos|dinero }} c/u</small></td>
+          <td class="num">{{ r.subtotal_centavos|dinero }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <dl class="ticket-totales">
+      <div class="ticket-total"><dt>Total</dt><dd>{{ venta.total_centavos|dinero }}</dd></div>
+      <div><dt>Pago con {{ venta.metodo_pago }}</dt><dd>{{ venta.recibido_centavos|dinero }}</dd></div>
+      {% if venta.metodo_pago == 'efectivo' %}
+      <div><dt>Cambio</dt><dd>{{ venta.cambio_centavos|dinero }}</dd></div>
+      {% endif %}
+    </dl>
+    <p class="ticket-gracias">Gracias por su compra</p>
+  </article>
+
+  <div class="acciones-ticket no-imprimir">
+    <a class="boton boton-cobrar" href="{{ url_for('ventas.caja') }}">Nueva venta</a>
+    <button class="boton" type="button" onclick="window.print()">Imprimir ticket</button>
+  </div>
+</div>
+{% endblock %}

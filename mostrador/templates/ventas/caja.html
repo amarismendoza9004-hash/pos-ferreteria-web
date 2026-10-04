@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block titulo %}Caja{% endblock %}
+{% block clase_main %}contenido-caja{% endblock %}
+
+{% block contenido %}
+<div class="caja">
+  <section class="buscador" aria-labelledby="titulo-buscar">
+    <h1 id="titulo-buscar" class="visualmente-oculto">Buscar productos</h1>
+    <label class="campo-busqueda">
+      <span>Producto</span>
+      <input id="busqueda" type="search" autocomplete="off" autofocus
+             placeholder="Escribe el nombre o escanea el código">
+    </label>
+    <p class="ayuda">Presiona Enter para agregar el primer resultado al ticket.</p>
+    <ul id="resultados" class="resultados" aria-live="polite"></ul>
+  </section>
+
+  <aside class="ticket ticket-caja" aria-labelledby="titulo-ticket">
+    <h2 id="titulo-ticket">Ticket actual</h2>
+    <ul id="renglones" class="renglones"></ul>
+    <p id="ticket-vacio" class="vacio">Agrega productos desde el buscador.</p>
+
+    <div class="total">
+      <span>Total</span>
+      <strong id="total">$0.00</strong>
+    </div>
+
+    <fieldset class="metodos">
+      <legend>Forma de pago</legend>
+      <label><input type="radio" name="metodo" value="efectivo" checked> Efectivo</label>
+      <label><input type="radio" name="metodo" value="tarjeta"> Tarjeta</label>
+      <label><input type="radio" name="metodo" value="transferencia"> Transferencia</label>
+    </fieldset>
+
+    <div id="bloque-efectivo" class="efectivo">
+      <label>
+        <span>Recibido</span>
+        <input id="recibido" type="text" inputmode="decimal" placeholder="0.00">
+      </label>
+      <p>Cambio: <strong id="cambio">$0.00</strong></p>
+    </div>
+
+    <p id="error-cobro" class="aviso aviso-error" hidden></p>
+    <button id="cobrar" class="boton boton-cobrar" type="button" disabled>Cobrar</button>
+    <button id="vaciar" class="boton-texto" type="button">Vaciar ticket</button>
+  </aside>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const URL_API_PRODUCTOS = "{{ url_for('api.buscar_productos') }}";
+  const URL_API_VENTAS = "{{ url_for('api.crear_venta') }}";
+</script>
+<script src="{{ url_for('static', filename='caja.js') }}"></script>
+{% endblock %}

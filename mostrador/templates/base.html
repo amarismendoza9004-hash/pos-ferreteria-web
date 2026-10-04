@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}{% endblock %} · {{ nombre_negocio }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="{{ url_for('ventas.caja') }}">{{ nombre_negocio }}</a>
+    <nav class="menu" aria-label="Secciones">
+      {% set actual = request.blueprint %}
+      <a href="{{ url_for('ventas.caja') }}" {% if request.endpoint == 'ventas.caja' %}aria-current="page"{% endif %}>Caja</a>
+      <a href="{{ url_for('ventas.historial') }}" {% if request.endpoint in ('ventas.historial', 'ventas.ticket') %}aria-current="page"{% endif %}>Ventas</a>
+      <a href="{{ url_for('productos.lista') }}" {% if actual == 'productos' %}aria-current="page"{% endif %}>Productos</a>
+      <a href="{{ url_for('reportes.resumen') }}" {% if actual == 'reportes' %}aria-current="page"{% endif %}>Reportes</a>
+    </nav>
+  </header>
+
+  <main class="contenido {% block clase_main %}{% endblock %}">
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% if mensajes %}
+        <div class="avisos" role="status">
+          {% for categoria, mensaje in mensajes %}
+            <p class="aviso aviso-{{ categoria }}">{{ mensaje }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block contenido %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

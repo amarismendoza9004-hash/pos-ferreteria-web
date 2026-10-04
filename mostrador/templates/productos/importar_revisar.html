@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titulo %}Revisar importación{% endblock %}
+
+{% block contenido %}
+<div class="encabezado-pagina">
+  <h1>Revisar importación</h1>
+</div>
+<p class="resumen-linea">{{ archivo }}: <strong>{{ total }} filas</strong> de productos.</p>
+
+<form class="filtros" method="get">
+  <label>Fila de encabezados
+    <input type="number" name="encabezado" min="1" value="{{ encabezado + 1 }}" style="width: 7rem">
+  </label>
+  <button class="boton" type="submit">Cambiar</button>
+  <p class="ayuda" style="margin:0 0 0.6rem">Es la fila donde dice "Código", "Descripción", "Precio"… Se detectó automáticamente.</p>
+</form>
+
+<h2 class="subtitulo">Así se ven las primeras filas</h2>
+<div class="tabla-envoltura">
+  <table class="tabla tabla-muestra">
+    <thead>
+      <tr>{% for e in encabezados %}<th scope="col">{{ e or 'Columna ' ~ loop.index }}</th>{% endfor %}</tr>
+    </thead>
+    <tbody>
+      {% for fila in muestra %}
+      <tr>{% for i in range(encabezados|length) %}<td>{{ fila[i] if i < fila|length }}</td>{% endfor %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<form class="formulario formulario-importar" method="post" action="{{ url_for('productos.confirmar_importacion') }}">
+  <input type="hidden" name="encabezado" value="{{ encabezado }}">
+  <h2>¿Qué columna es cada dato?</h2>
+  <div class="formulario-fila">
+    {% for campo, etiqueta in campos.items() %}
+    <label>
+      <span>{{ etiqueta }}</span>
+      <select name="col_{{ campo }}" {% if campo in obligatorios %}required{% endif %}>
+        <option value="">{{ 'Elige una columna' if campo in obligatorios else 'No importar' }}</option>
+        {% for e in encabezados %}
+        <option value="{{ loop.index0 }}" {% if columnas.get(campo) == loop.index0 %}selected{% endif %}>{{ e or 'Columna ' ~ loop.index }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    {% endfor %}
+  </div>
+
+  <div class="formulario-fila">
+    <label>
+      <span>Aumentar el precio en (%)</span>
+      <input name="aumento" inputmode="decimal" value="0">
+      <small>Si la columna es tu precio de compra, escribe tu margen de ganancia. Por ejemplo, 30 convierte $100 en $130. Déjalo en 0 si es el precio al público.</small>
+    </label>
+    <fieldset class="metodos opciones-existentes">
+      <legend>Si un código ya existe en tu sistema</legend>
+      <label><input type="radio" name="si_existe" value="actualizar" checked> Actualizar nombre y precio</label>
+      <label><input type="radio" name="si_existe" value="omitir"> Dejarlo como está</label>
+    </fieldset>
+  </div>
+  <p class="ayuda">Las existencias de los productos nuevos empiezan en 0 si no eliges una columna de existencias. Las de los productos que ya tienes no se tocan.</p>
+
+  <div class="formulario-acciones">
+    <button class="boton boton-cobrar" type="submit">Importar {{ total }} productos</button>
+    <a href="{{ url_for('productos.importar') }}">Subir otro archivo</a>
+  </div>
+</form>
+{% endblock %}

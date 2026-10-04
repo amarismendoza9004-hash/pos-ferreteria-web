@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block titulo %}Importar catálogo{% endblock %}
+
+{% block contenido %}
+<div class="encabezado-pagina">
+  <h1>Importar catálogo</h1>
+</div>
+
+<form class="formulario" method="post" enctype="multipart/form-data">
+  <p>Sube la lista de precios de tu proveedor (Truper u otro) en Excel o CSV. En el siguiente paso eliges qué columna es el código, la descripción y el precio, y revisas todo antes de guardar.</p>
+  <label>
+    <span>Archivo del catálogo</span>
+    <input type="file" name="archivo" accept=".xlsx,.xlsm,.csv,.txt" required>
+    <small>Formatos: Excel (.xlsx) o CSV. Si tu archivo es .xls, ábrelo en Excel y guárdalo como .xlsx.</small>
+  </label>
+  <div class="formulario-acciones">
+    <button class="boton boton-cobrar" type="submit">Leer archivo</button>
+    <a href="{{ url_for('productos.lista') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
